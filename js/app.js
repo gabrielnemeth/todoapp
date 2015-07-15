@@ -1,17 +1,30 @@
-var input = document.getElementById('addTask');
-var taskList = document.getElementById('taskList');
-var taskItem;
+/*jshint onevar: true */
+/*jslint devel:true */
 
-taskList.style.visibility = 'hidden';
+(function () {
+    'use strict';
+    var input = document.getElementById('addTask'),
+        taskList = document.getElementById('taskList'),
+        closeBtn = document.getElementsByClassName('closeBtn'),
+        taskItem;
 
-window.addEventListener("keydown", function (event) {
-    if (event.keyCode == 13) {
-        taskItem = input.value;
-        if (taskItem !== '') {
-            taskList.style.visibility = 'visible';
-            taskList.innerHTML += '<p>' + taskItem + '</p>';
-            
-            
+    taskList.style.visibility = 'hidden';
+
+    window.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+            taskItem = input.value;
+            if (taskItem !== '') {
+                taskList.style.visibility = 'visible';
+                taskList.innerHTML += '<p>' + taskItem + '<img src="img/close.png" class="closeBtn" /></p>';
+                closeBtn = document.getElementsByClassName('closeBtn');
+                console.log(closeBtn);
+            }
         }
-    }
-}, true);
+    }, true);
+    
+    closeBtn.onclick = function () {
+        console.log('Close');
+        console.log(closeBtn);
+    };
+
+}());

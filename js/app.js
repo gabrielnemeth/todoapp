@@ -6,25 +6,39 @@
     var input = document.getElementById('addTask'),
         taskList = document.getElementById('taskList'),
         closeBtn = document.getElementsByClassName('closeBtn'),
+        editInput = document.getElementsByClassName('edit'),
         taskItem;
 
-    taskList.style.visibility = 'hidden';
+    for (var i = 0; i < editInput.length; i++) {
+        editInput[i].style.display = 'none';
+    }
 
-    window.addEventListener("keydown", function (event) {
+
+    document.addEventListener("keydown", function (event) {
         if (event.keyCode === 13) {
             taskItem = input.value;
             if (taskItem !== '') {
-                taskList.style.visibility = 'visible';
-                taskList.innerHTML += '<p>' + taskItem + '<img src="img/close.png" class="closeBtn" /></p>';
-                closeBtn = document.getElementsByClassName('closeBtn');
-                console.log(closeBtn);
+                taskList.innerHTML += '<div class="task"><p class="taskParagraph"><input type="text" class="edit" value="" style="display: none;"/>' + taskItem + '</p><img src="img/close.png" class="closeBtn" /></div>';
             }
+            input.value = '';
         }
     }, true);
-    
-    closeBtn.onclick = function () {
-        console.log('Close');
-        console.log(closeBtn);
-    };
+
+    document.addEventListener('click', function (e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        
+        if (target.className === 'closeBtn') {
+            var paragraph = target.parentNode;
+            paragraph.parentNode.removeChild(paragraph);
+        }
+        
+        if (target.className === 'taskParagraph') {
+            var inputField = target.parentNode;
+            console.log(inputField);
+        }        
+        
+    }, false);
+
 
 }());

@@ -1,66 +1,110 @@
-/*jshint onevar: true */
-/*jslint devel:true */
+//Global variables
+var addTaskInput = document.getElementById('addTask');
+var closeBtn = document.getElementsByClassName('closeBtn');
+var taskList = document.getElementById('taskList');
 
-(function () {
-    'use strict';
-    var input = document.getElementById('addTask'),
-        taskList = document.getElementById('taskList'),
-        closeBtn = document.getElementsByClassName('closeBtn'),
-        editInput = document.getElementsByClassName('edit'),
-        taskItem;
+//Functions
 
-    var hideTaskList = function () {
-        taskList.style.visibility = 'hidden';
-    }; //Hide TaskList div
+//Create elements
 
-    var showTaskList = function () {
+var createElements = function (content) {
 
-        taskList.style.visibility = 'visible';
-    }; //Show TaskList div
+    var taskContent = document.createElement('div');
+    taskContent.className = 'task'
+    var checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';
+    var paragraph = document.createElement('p');
+    paragraph.className = 'taskParagraph';
+    paragraph.innerHTML = content;
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'editInput';
+    var image = document.createElement('img');
+    image.src = 'img/close.png';
+    image.className = 'closeBtn';
 
-    for (var i = 0; i < editInput.length; i++) {
-        editInput[i].style.display = 'none';
+    taskContent.appendChild(checkBox);
+    taskContent.appendChild(paragraph);
+    taskContent.appendChild(input);
+    taskContent.appendChild(image);
+
+    return taskContent;
+}
+
+//Add task
+
+var addTask = function () {
+
+    if (addTaskInput.value != '') {
+        var taskContent = createElements(addTaskInput.value);
+        taskList.appendChild(taskContent);
+        addTaskInput.value = ''; //Empty the input field
+    } //Check if input is not empty
+}
+
+//Edit task
+
+var editTask = function () {
+    console.log('edit');
+}
+
+//Delete task
+
+var deleteTask = function () {
+    var parent = this.parentNode;
+    parent.parentNode.removeChild(parent);
+}
+
+//Complete task
+
+var completeTask = function () {
+    if (this.checked === true) {
+        this.parentNode.className += ' complete';
+    } else {
+        this.parentNode.className = 'task';
     }
+}
 
-    if (taskList.children.length === 0) {
-        hideTaskList();
-    } //Disable input for editing Tasks by default
+//Incomplete task
 
-    document.addEventListener("keydown", function (event) {
-        if (event.keyCode === 13) {
+var incompleteTask = function () {
+    console.log('incomplete');
+}
 
-            taskItem = input.value;
-            if (taskItem !== '') {
-                taskList.innerHTML += '<div class="task"><p class="taskParagraph"><input type="text" class="edit" value="" style="display: none;"/>' + taskItem + '</p><img src="img/close.png" class="closeBtn" /></div>';
-            } //If input field isn't empty, add value of the input to a TaskList
+//Bind events
 
-            input.value = ''; //After pressing enter, remove the value from input
+var bindEvents = function (listItem) {
+    var checkbox = listItem.querySelector('input[type="checkbox"]');
+    var paragraphEdit = listItem.querySelector('p');
+    var deleteBtn = listItem.querySelector('.closeBtn');
+    var taskDiv = listItem.querySelector('.task');
 
-            if (taskList.children.length > 0) {
-                showTaskList();
-            } //If the Task list is hidden, then add visibility
-        }
-    }, true);
+    //console.log(listItem);
 
-    document.addEventListener('click', function (e) {
-        e = e || window.event;
-        var target = e.target || e.srcElement;
+    checkbox.onclick = completeTask;
+    paragraphEdit.onclick = editTask;
+    deleteBtn.onclick = deleteTask;
+}
 
+addTaskInput.addEventListener('keydown', function (event) {
+    if (event.keyCode === 13) {
+        addTask();
+        loopTaskItems();
+    }
+}, true);
 
-        if (target.className === 'closeBtn') {
-            var paragraph = target.parentNode;
-            paragraph.parentNode.removeChild(paragraph);
-        } //After clicking on close icon, the Task is removed from Task List entirelly
+//Loop trough items
+var loopTaskItems = function () {
+    for (var i = 0; taskList.children.length > i; i++) {
+        bindEvents(taskList.children[i]);
 
-        if (taskList.children.length === 0) {
-            hideTaskList();
-        } //Hide Task List if there aren't tasks
+        if (taskList.children[i].classList.contains('edit')) {
+            var children = taskList.children[i];
+            children = children.querySelector('input[type="checkbox"]');
+            children.disabled = true;
+        } //If the task is eddited, the checkbox is disabled
 
-        if (target.className === 'taskParagraph') {
-            var inputField = target.parentNode;
-        } //TODO: after clicking on paragraph change p into input tag
+    }
+};
 
-    }, false);
-
-
-}());
+loopTaskItems();

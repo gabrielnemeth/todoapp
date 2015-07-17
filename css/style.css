@@ -1,10 +1,18 @@
-html, body, p {
+html,
+body,
+p {
     margin: 0;
     padding: 0;
 }
 
-textarea:focus, input:focus{
+html, input {
+    font-family: 'Roboto', sans-serif;
+}
+
+textarea:focus,
+input:focus {
     outline: 0;
+    font-size: 13px;
 }
 
 #wrapper {
@@ -15,16 +23,21 @@ textarea:focus, input:focus{
 
 #addTask {
     width: 50%;
-    height: 30px;
+    height: 38px;
     line-height: 30px;
     font-size: 20px;
     margin-top: 20%;
+    border: 1px solid #c6c6c6;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 #taskList {
     margin: 20px auto 0 auto;
     width: 50%;
     border: 1px solid #c6c6c6;
+    box-sizing: border-box;
+    font-size: 13px;
 }
 
 .task {
@@ -34,8 +47,35 @@ textarea:focus, input:focus{
     text-align: left;
 }
 
+.task .editInput {
+    display: none;
+}
+
+.task.edit .editInput {
+    display: inline-block;
+    border: 0;
+    border-bottom: 1px solid #c6c6c6;
+    width: 90%;
+}
+
+.task.edit p {
+    display: none;
+}
+
+.task.complete p.taskParagraph {
+    text-decoration: line-through;
+    color: #c6c6c6;
+}
+
 .task:last-child {
     border: 0;
+}
+
+.task input[type="checkbox"] {
+    margin: 4px 5px 0 0;
+    padding: 0;
+    display: inline-block;
+    float: left;
 }
 
 .task p {
@@ -46,8 +86,4 @@ textarea:focus, input:focus{
 .task img {
     float: right;
     cursor: pointer;
-}
-
-.task .edit {
-    border: 0;
 }

@@ -44,8 +44,41 @@ var addTask = function () {
 
 //Edit task
 
-var editTask = function () {
-    console.log('edit');
+var editTask = function (paragraph) {
+    var parrent = paragraph.parentElement;
+    var input = parrent.querySelector('.editInput');
+    var checkbox = parrent.querySelector('input[type="checkbox"]');
+
+    //Set elements to begining state after editing
+
+    var resetStates = function () {
+        paragraph.innerHTML = input.value;
+        input.style.display = 'none';
+        paragraph.style.display = 'inline-block';
+        parrent.className = 'task';
+        checkbox.disabled = false;
+    }
+
+    parrent.className = 'task edit';
+
+    input.value = paragraph.innerHTML;
+    checkbox.disabled = true;
+    paragraph.style.display = 'none';
+    input.style.display = 'inline-block';
+    input.focus();
+
+    input.addEventListener('keydown', function (event) {
+        if (event.keyCode === 13) {
+            resetStates();
+        }
+    }, true);
+
+    document.addEventListener('click', function (event) {
+        if (!(event.target === input)) {
+            resetStates();
+        }
+    }, true);
+
 }
 
 //Delete task
@@ -55,7 +88,7 @@ var deleteTask = function () {
     parent.parentNode.removeChild(parent);
 }
 
-//Complete task
+//Toggle complete incomplete task
 
 var completeTask = function () {
     if (this.checked === true) {
@@ -63,12 +96,6 @@ var completeTask = function () {
     } else {
         this.parentNode.className = 'task';
     }
-}
-
-//Incomplete task
-
-var incompleteTask = function () {
-    console.log('incomplete');
 }
 
 //Bind events
@@ -79,10 +106,16 @@ var bindEvents = function (listItem) {
     var deleteBtn = listItem.querySelector('.closeBtn');
     var taskDiv = listItem.querySelector('.task');
 
-    //console.log(listItem);
+    //console.log();
 
     checkbox.onclick = completeTask;
-    paragraphEdit.onclick = editTask;
+
+    if (!(listItem.classList.contains('complete'))) {
+        paragraphEdit.onclick = function () {
+            editTask(paragraphEdit);
+        };
+    }
+
     deleteBtn.onclick = deleteTask;
 }
 

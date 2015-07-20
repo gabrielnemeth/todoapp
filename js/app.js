@@ -5,6 +5,16 @@ var taskList = document.getElementById('taskList');
 
 //Functions
 
+//Check if Task list is empty
+
+var hideEmptyTaskList = function () {
+    if (taskList.children.length === 0) {
+        taskList.style.display = 'none';
+    } else {
+        taskList.style.display = 'block';
+    }
+}
+
 //Create elements
 
 var createElements = function (content) {
@@ -39,6 +49,8 @@ var addTask = function () {
         var taskContent = createElements(addTaskInput.value);
         taskList.appendChild(taskContent);
         addTaskInput.value = ''; //Empty the input field
+        hideEmptyTaskList();
+        saveLocalStorage();
     } //Check if input is not empty
 }
 
@@ -70,15 +82,17 @@ var editTask = function (paragraph) {
     input.addEventListener('keydown', function (event) {
         if (event.keyCode === 13) {
             resetStates();
+            saveLocalStorage();
         }
     }, true);
 
     document.addEventListener('click', function (event) {
         if (!(event.target === input)) {
             resetStates();
+            saveLocalStorage();
         }
     }, true);
-
+    
 }
 
 //Delete task
@@ -86,6 +100,19 @@ var editTask = function (paragraph) {
 var deleteTask = function () {
     var parent = this.parentNode;
     parent.parentNode.removeChild(parent);
+    hideEmptyTaskList();
+    saveLocalStorage();
+}
+
+//Save Task list to Local storage
+var saveLocalStorage = function () {
+    localStorage.taskList = taskList.innerHTML;
+}
+
+//Load saved Local Storage
+
+var loadLocalStorage = function () {
+    taskList.innerHTML = localStorage.taskList;
 }
 
 //Toggle complete incomplete task
@@ -96,6 +123,9 @@ var completeTask = function () {
     } else {
         this.parentNode.className = 'task';
     }
+    
+    saveLocalStorage();
+    
 }
 
 //Bind events
@@ -140,4 +170,6 @@ var loopTaskItems = function () {
     }
 };
 
+loadLocalStorage();
 loopTaskItems();
+hideEmptyTaskList();

@@ -56,6 +56,8 @@ input:focus {
     border: 0;
     border-bottom: 1px solid #c6c6c6;
     width: 90%;
+    padding: 0;
+    margin: 0;
 }
 
 .task.edit p {
@@ -81,6 +83,7 @@ input:focus {
 .task p {
     width: 90%;
     display: inline-block;
+    border-bottom: 1px solid transparent;
 }
 
 .task img {

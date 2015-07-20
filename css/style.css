@@ -1,11 +1,18 @@
 html,
-body,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
 p {
     margin: 0;
     padding: 0;
 }
 
-html, input {
+html,
+input {
     font-family: 'Roboto', sans-serif;
 }
 
@@ -15,8 +22,13 @@ input:focus {
     font-size: 13px;
 }
 
+body {
+    background: url(../img/bg.jpg) no-repeat 50% 50%;
+    background-size: cover;
+}
+
 #wrapper {
-    width: 960px;
+    max-width: 960px;
     margin: 0 auto;
     text-align: center;
 }
@@ -45,6 +57,7 @@ input:focus {
     margin: 0;
     padding: 10px 10px;
     text-align: left;
+    background-color: #FFF;
 }
 
 .task .editInput {
@@ -89,4 +102,14 @@ input:focus {
 .task img {
     float: right;
     cursor: pointer;
+}
+
+@media screen and (max-width: 780px) {
+    #addTask,
+    #taskList {
+        width: 70%;
+    }
+    .task p {
+        width: 80%;
+    }
 }

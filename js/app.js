@@ -60,14 +60,24 @@ var editTask = function (paragraph) {
     var parrent = paragraph.parentElement;
     var input = parrent.querySelector('.editInput');
     var checkbox = parrent.querySelector('input[type="checkbox"]');
+    var complete = false;
 
+    if (parrent.classList.contains('complete')) {
+        complete = true;
+    }
     //Set elements to begining state after editing
 
-    var resetStates = function () {
+    var resetStates = function (complete) {
         paragraph.innerHTML = input.value;
         input.style.display = 'none';
         paragraph.style.display = 'inline-block';
-        parrent.className = 'task';
+        if (complete) {
+            parrent.className = 'task complete';
+            console.log('contains');
+        } else {
+            parrent.className = 'task';
+            console.log('contains not');
+        }
         checkbox.disabled = false;
     }
 
@@ -81,18 +91,18 @@ var editTask = function (paragraph) {
 
     input.addEventListener('keydown', function (event) {
         if (event.keyCode === 13) {
-            resetStates();
+            resetStates(complete);
             saveLocalStorage();
         }
     }, true);
 
     document.addEventListener('click', function (event) {
         if (!(event.target === input)) {
-            resetStates();
+            resetStates(complete);
             saveLocalStorage();
         }
     }, true);
-    
+
 }
 
 //Delete task
@@ -119,19 +129,26 @@ var loadLocalStorage = function () {
 
 var completeTask = function () {
     if (this.checked === true) {
+        this.className = 'checked';
         this.parentNode.className += ' complete';
     } else {
         this.parentNode.className = 'task';
+        this.className = '';
     }
-    
+
     saveLocalStorage();
-    
+
 }
 
 //Bind events
 
 var bindEvents = function (listItem) {
     var checkbox = listItem.querySelector('input[type="checkbox"]');
+
+    if (checkbox.classList.contains('checked')) {
+        checkbox.checked = true;
+    }
+
     var paragraphEdit = listItem.querySelector('p');
     var deleteBtn = listItem.querySelector('.closeBtn');
     var taskDiv = listItem.querySelector('.task');
@@ -140,11 +157,10 @@ var bindEvents = function (listItem) {
 
     checkbox.onclick = completeTask;
 
-    if (!(listItem.classList.contains('complete'))) {
-        paragraphEdit.onclick = function () {
-            editTask(paragraphEdit);
-        };
-    }
+
+    paragraphEdit.onclick = function () {
+        editTask(paragraphEdit);
+    };
 
     deleteBtn.onclick = deleteTask;
 }
